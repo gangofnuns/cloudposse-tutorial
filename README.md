@@ -6,10 +6,10 @@ please see: https://github.com/vmware-tanzu/carvel-vendir/tree/develop
 
 # Instructions
 
-  1.) Check out this repository. 
-  2.) Install vendir, using a tool such as 'brew'.
+  1.) Check out this repository.</br>
+  2.) Install vendir, using a tool such as 'brew'.</br>
   3.) Build the repo by running a command such as 'vendir sync' in 
-the top level directory, in this repo.  
+the top level directory, in this repo.  </br>
 
 The vendir software will then 
 download all the repos specified in the vendir.yml file, and download
