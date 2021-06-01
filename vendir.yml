@@ -1,1 +1,96 @@
-
+apiVersion: vendir.k14s.io/v1alpha1
+kind: Config
+directories:
+  # Terraform components
+  - path: components/terraform
+    contents:
+      # my-root-admin
+      # my-root
+      - path: tfstate-backend
+        git:
+          url: https://github.com/cloudposse/terraform-aws-components
+          # Note: we remove state.tf and tfstate-context.tf files 
+          # since they are not used in the upstream stacks.
+          ref: all-new-components
+        newRootPath: modules/tfstate-backend
+        includePaths:
+          - modules/tfstate-backend/**/*
+        excludePaths:
+          - modules/tfstate-backend/**/tfstate.tf
+          - modules/tfstate-backend/**/tfstate-context.tf
+        # These files are added as specific patterns for configuring
+        # access that do not require duplicate tfstate-backend modules, 
+        # with different generated backend.tf configs.
+        ignorePaths:
+          - backend.tf.json
+      # ms-root-admin
+      # gbl-root
+      - path: account
+        git:
+          url: https://github.com/cloudposse/terraform-aws-components
+          # Note that it has a tfstate-context.tf file, which we exclude. 
+          ref: all-new-components
+        newRootPath: modules/account
+        includePaths:
+          - modules/account/**/*
+        excludePaths:
+          - modules/account/**/tfstate.tf
+          - modules/account/**/tfstate-context.tf
+        ignorePaths:
+          - backend.tf.json
+      # my-root-admin
+      # gbl-root
+      - path: account-map
+        git:
+          url: https://github.com/cloudposse/terraform-aws-components
+          ref: all-new-components
+        newRootPath: modules/account-map
+        includePaths:
+          - modules/account-map/**/*
+        excludePaths:
+          - modules/account-map/**/tfstate.tf
+          - modules/account-map/**/tfstate-context.tf
+        ignorePaths:
+          - backend.tf.json
+      - path: vpc
+        git:
+          url: https://github.com/cloudposse/terraform-aws-components
+          ref: all-new-components
+        newRootPath: modules/vpc
+        includePaths:
+          - modules/vpc/**/*
+        excludePaths:
+          - modules/vpc/**/tfstate.tf
+          - modules/vpc/**/tfstate-context.tf
+        ignorePaths:
+          - backend.tf.json
+      - path: eks
+        git:
+          url: https://github.com/cloudposse/terraform-aws-components
+          ref: all-new-components
+        newRootPath: modules/eks
+        includePaths:
+          - modules/eks/**/*
+        excludePaths:
+          - modules/eks/**/tfstate.tf
+          - modules/eks/**/tfstate-context.tf
+        ignorePaths:
+          - backend.tf.json
+      # We add the latest compatible 'stacks' and 'modules' components from the 
+      # terraform-yaml-stacks-config repo.  Note these use the deep-merging 
+      # custom provider to produce fast, DRY, stack configs.
+      - path: components/terraform
+        git:
+          url: https://github.com/cloudposse/terraform-yaml-stack-config
+          ref: v0.17.0
+        includePaths:
+          - **/*
+        excludePaths:
+          - modules/**/tfstate.tf
+          - modules/**/tfstate-context.tf
+          - modules/**/*.yml
+        ignorePaths:
+          - **/stacks/*.yml
+          
+         
+       
